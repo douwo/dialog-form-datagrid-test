@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="css/icon.css" />
+		<style type="text/css">
+			.window-mask {
+				background-color: rgba(0, 0, 0, 0.3);
+			}
+		</style>
+	</head>
+
+	<body>
+		<h2>Basic Dialog</h2>
+		<p>Click below button to open or close dialog.</p>
+		<div style="margin:20px 0;">
+			<a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#dlg').dialog('open')">Open</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#dlg').dialog('close')">Close</a>
+		</div>
+		<div id="dlg" class="easyui-dialog" title="Basic Dialog" data-options="iconCls:'icon-save',modal: 'true'" style="width:400px;height:350px;padding:10px">
+			<form id="ff" method="post" style="width: 350px;">
+				<div style="margin-bottom:20px">
+					<input class="easyui-textbox" name="name" style="width:100%" data-options="label:'Name:',required:true">
+				</div>
+				<div style="margin-bottom:20px">
+					<input class="easyui-textbox" name="email" style="width:100%" data-options="label:'Email:',required:true,validType:'email'">
+				</div>
+				<div style="margin-bottom:20px">
+					<input class="easyui-textbox" name="subject" style="width:100%" data-options="label:'Subject:',required:true">
+				</div>
+				<div style="margin-bottom:20px">
+					<input class="easyui-textbox" name="message" style="width:100%;height:60px" data-options="label:'Message:',multiline:true">
+				</div>
+				<div style="margin-bottom:20px">
+					<!--<input class="easyui-searchbox" data-options="label:'search:',prompt:'Please Input Name',searcher:doSearch" style="width:300px"></input>-->
+					<select id="user_select" class="easyui-combobox" style="width: 80%;" name="language" data-options="label:'select'">
+						<option value="ar" >EST-1</option>
+						<option value="bg">EST-10</option>
+						<option value="ca">EST-11</option>
+						<option value="zh-cht">EST-12</option>
+					</select>
+					<button type="button" class="easyui-linkbutton" data-options="" onclick="openDatagird()" />详情</button>
+				</div>
+			</form>
+			<div style="text-align:center;padding:5px 0">
+				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" style="width:80px">Submit</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()" style="width:80px">Clear</a>
+			</div>
+		</div>
+
+		<div id="dlg2" class="easyui-dialog" title="Datagrid Dialog" data-options="iconCls:'icon-edit',modal:'true'" style="width:800px;height:750px;padding:10px">
+			<table id="dg3" class="easyui-datagrid" style="width:100%;height:100%">
+				<thead>
+					<tr>
+						<th data-options="field:'ck',checkbox:true"></th>
+						<th data-options="field:'itemid',width:80">Item ID</th>
+						<th data-options="field:'productid',width:100">Product</th>
+						<th data-options="field:'listprice',width:80,align:'right'">List Price</th>
+						<th data-options="field:'unitcost',width:80,align:'right'">Unit Cost</th>
+						<th data-options="field:'attr1',width:220">Attribute</th>
+						<th data-options="field:'status',width:60,align:'center'">Status</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+
+	</body>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function() {
+			$("#dlg2").dialog('close');
+		});
+		$('#user_select').combobox({
+			onChange:function(){
+				var t = $('#user_select').combobox('getText');
+				var ArryT = $('#user_select').combobox('getData');
+				for(i=0;i<ArryT.length;i++){
+					if(ArryT[i].text == t){
+						$('#dg3').datagrid('selectRow', i);
+						break;
+					}
+				}
+			}
+		})
+		$('#dlg2').dialog({
+			buttons: [{
+				text: 'Save',
+				handler: function() {
+					var row = $('#dg3').datagrid('getSelected');
+					if(row) {
+						$('#user_select').combobox('setValue', row.itemid);
+						$("#dlg2").dialog('close');
+					} else {
+						alert('请选择一条记录');
+					}
+				}
+			}, {
+				text: 'Close',
+				handler: function() {
+					$("#dlg2").dialog("close");
+				}
+			}]
+		})
+		$('#dg3').datagrid({
+			rownumbers: true,
+			singleSelect: true,
+			//url: 'js/datagrid_data1.json'
+			data: [{
+					"productid": "FI-SW-01",
+					"productname": "Koi",
+					"unitcost": 10.00,
+					"status": "P",
+					"listprice": 36.50,
+					"attr1": "Large",
+					"itemid": "EST-1"
+				},
+				{
+					"productid": "K9-DL-01",
+					"productname": "Dalmation",
+					"unitcost": 12.00,
+					"status": "P",
+					"listprice": 18.50,
+					"attr1": "Spotted Adult Female",
+					"itemid": "EST-10"
+				},
+				{
+					"productid": "RP-SN-01",
+					"productname": "Rattlesnake",
+					"unitcost": 12.00,
+					"status": "P",
+					"listprice": 38.50,
+					"attr1": "Venomless",
+					"itemid": "EST-11"
+				},
+				{
+					"productid": "RP-SN-01",
+					"productname": "Rattlesnake",
+					"unitcost": 12.00,
+					"status": "P",
+					"listprice": 26.50,
+					"attr1": "Rattleless",
+					"itemid": "EST-12"
+				},
+				{
+					"productid": "RP-LI-02",
+					"productname": "Iguana",
+					"unitcost": 12.00,
+					"status": "P",
+					"listprice": 35.50,
+					"attr1": "Green Adult",
+					"itemid": "EST-13"
+				},
+				{
+					"productid": "FL-DSH-01",
+					"productname": "Manx",
+					"unitcost": 12.00,
+					"status": "P",
+					"listprice": 158.50,
+					"attr1": "Tailless",
+					"itemid": "EST-14"
+				},
+				{
+					"productid": "FL-DSH-01",
+					"productname": "Manx",
+					"unitcost": 12.00,
+					"status": "P",
+					"listprice": 83.50,
+					"attr1": "With tail",
+					"itemid": "EST-15"
+				},
+				{
+					"productid": "FL-DLH-02",
+					"productname": "Persian",
+					"unitcost": 12.00,
+					"status": "P",
+					"listprice": 23.50,
+					"attr1": "Adult Female",
+					"itemid": "EST-16"
+				},
+				{
+					"productid": "FL-DLH-02",
+					"productname": "Persian",
+					"unitcost": 12.00,
+					"status": "P",
+					"listprice": 89.50,
+					"attr1": "Adult Male",
+					"itemid": "EST-17"
+				},
+				{
+					"productid": "AV-CB-01",
+					"productname": "Amazon Parrot",
+					"unitcost": 92.00,
+					"status": "P",
+					"listprice": 63.50,
+					"attr1": "Adult Male",
+					"itemid": "EST-18"
+				}
+			]
+		});
+
+		function openDatagird() {
+			$("#dlg2").dialog('open');
+		}
+	</script>
+
+</html>
